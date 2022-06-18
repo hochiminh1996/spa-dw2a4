@@ -6,6 +6,18 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+//CRIANDO UMA TABELA NO BANCO CHAMADA FEEDBACK
+model Feedback {
+  id         String  @id @default(uuid())
+  name       String
+  email      String
+  type       String
+  comment    String
+  screenshot String?
+  @@map("feedbacks")
+  //nome da tela
 }
