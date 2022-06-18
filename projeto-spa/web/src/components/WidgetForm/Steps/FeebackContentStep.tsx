@@ -1,6 +1,7 @@
 import { AppWindow, ArrowArcLeft, Camera, Trash } from "phosphor-react";
 import { FormEvent, useState } from "react";
 import { FeedbackType, feedbackTypes } from "..";
+import { api } from "../../../lib/api";
 // import { api } from "../../../lib/api";
 import { CloseButton } from "../../CloseButton";
 import { Loading } from "../../Loading";
@@ -30,17 +31,21 @@ export function FeedbackContentStep({
 
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
 
-      function handleSubmitFeedback(event: FormEvent) {
+      async function handleSubmitFeedback(event: FormEvent) {
        
         event.preventDefault();
+        setIsSendingFeedback(true);
+
         
-        // api.post('/feedbacks',{
-        //     name,
-        //     email,
-        //     type: feedbackType,
-        //     commment: comment,
-        //     screenshot
-        // })
+        await api.post('/feedbacks',{
+            name,
+            email,
+            type: feedbackType,
+            comment,
+            screenshot
+        })
+        
+        setIsSendingFeedback(false);
 
         onFeedbackSent();
     }
