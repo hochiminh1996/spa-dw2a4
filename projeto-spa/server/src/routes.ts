@@ -12,28 +12,35 @@ routes.post('/feedbacks', async (req, res) => {
 
     const { name, email, type, comment, screenshot } = req.body;
 
-    const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
+    try {
 
-    const nodemailerMailAdapter = new NodemailerMailAdapter();
+        const prismaFeedbacksRepository = new PrismaFeedbacksRepository();
 
-    const submitFeedbackUseCase = new SubmitFeedbackUseCase(prismaFeedbacksRepository,nodemailerMailAdapter);
+        const nodemailerMailAdapter = new NodemailerMailAdapter();
 
-    await submitFeedbackUseCase.execute({
-        name, email, type, comment, screenshot,
-    })
-    
-    // transport.sendMail({
-    //    from: "Equipe : <teste@hotmail.com",
-    //    to: "Felippe : <ambrsp@hotmail.com>",
-    //    subject:"Problema no site",
-    //    html: [
-    //         `<div style="font-family:arial; font-size: 16px;">`,
-    //         `<p> Tipo do feedback : ${type}</p>`,	
-    //         `<p> Comentário : ${comment}</p>`,	
-    //         `</div>`
-    //    ].join("\n")
-    // });
+        const submitFeedbackUseCase = new SubmitFeedbackUseCase(prismaFeedbacksRepository, nodemailerMailAdapter);
 
-    return res.status(201).send();
+        await submitFeedbackUseCase.execute({
+            name, email, type, comment, screenshot,
+        })
+
+        // transport.sendMail({
+        //    from: "Equipe : <teste@hotmail.com",
+        //    to: "Felippe : <ambrsp@hotmail.com>",
+        //    subject:"Problema no site",
+        //    html: [
+        //         `<div style="font-family:arial; font-size: 16px;">`,
+        //         `<p> Tipo do feedback : ${type}</p>`,	
+        //         `<p> Comentário : ${comment}</p>`,	
+        //         `</div>`
+        //    ].join("\n")
+        // });
+
+        return res.status(201).send();
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send();
+
+    }
     // res.send("Deu bom");
 })
